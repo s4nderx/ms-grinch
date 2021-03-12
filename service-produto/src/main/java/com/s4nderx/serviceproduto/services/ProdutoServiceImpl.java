@@ -4,6 +4,8 @@ import com.s4nderx.serviceproduto.entities.Produto;
 import com.s4nderx.serviceproduto.repositories.ProdutoRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
+
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
 
@@ -15,5 +17,10 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public Produto inserir(Produto produto) {
         return repository.save(produto);
+    }
+
+    @Override
+    public Produto one(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NoResultException(String.format("Produto de código %d não encontrado", id)));
     }
 }

@@ -1,36 +1,42 @@
 package com.s4nderx.serviceproduto.controllers;
 
 import com.s4nderx.serviceproduto.dtos.request.ProdutoPersistDTO;
-import com.s4nderx.serviceproduto.dtos.response.ProdutoResponseDTO;
 import com.s4nderx.serviceproduto.entities.Produto;
-import com.s4nderx.serviceproduto.services.ProdutoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import javax.validation.Valid;
 
-@RestController
-@RequestMapping("api/produtos")
-public class ProdutoController {
-
-    private final ProdutoService produtoService;
-
-    public ProdutoController (ProdutoService produtoService){
-        this.produtoService = produtoService;
-    }
+public interface ProdutoController {
 
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> inserir(@RequestBody ProdutoPersistDTO dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    ResponseEntity<Produto> inserir(@Valid @RequestBody ProdutoPersistDTO dto);
 
-        Produto produto = new Produto(dto.getDescricao(), dto.getValor());
-        produto = produtoService.inserir(produto);
-        ProdutoResponseDTO responseDTO = new ProdutoResponseDTO(produto.getId(), produto.getDescricao(), produto.getValor());
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(responseDTO.getId()).toUri();
-        return ResponseEntity.created(uri).build();
-
-    }
+    @Operation(summary = "Retorna o produto correspondente ao identificador recuperado por parametro")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "404",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                                "codigo": "X_100",
+                                                "mensagem": "Produto de código 666 não encontrado",
+                                                "documentacao": null
+                                            }
+                                            """
+                            )
+                    )
+            )
+    })
+    @GetMapping("{id}")
+    Produto one(@PathVariable("id") Long id);
 }

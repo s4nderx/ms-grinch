@@ -16,7 +16,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
          #      validate: validar o schema, não faz mudanças no banco de dados.
          #      update: faz update o schema.
          #      create: cria o schema, destruindo dados anteriores.
@@ -25,3 +25,8 @@ spring:
     properties:
       hibenate:
         format_sql: true
+springdoc:
+  api-docs:
+    path: /api-documentation
+  swagger-ui:
+    path: documentation

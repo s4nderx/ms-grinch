@@ -4,25 +4,29 @@ import java.math.BigDecimal;
 
 public class ProdutoResponseDTO {
 
-    private final Long id;
-    private final String descricao;
-    private final BigDecimal valor;
+    private String descricao;
+    private BigDecimal valor;
 
-    public ProdutoResponseDTO(Long id, String descricao, BigDecimal valor) {
-        this.id = id;
-        this.descricao = descricao;
-        this.valor = valor;
+    @Deprecated
+    public ProdutoResponseDTO() {
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public String getDescricao() {
         return descricao;
     }
 
+    @Deprecated
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
     public BigDecimal getValor() {
         return valor;
+    }
+
+    @Deprecated
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 }
