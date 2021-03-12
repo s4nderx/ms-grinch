@@ -25,6 +25,12 @@ spring:
     properties:
       hibenate:
         format_sql: true
+  artemis:
+    mode: native
+    host: ${JMS_HOST:localhost}
+    port: ${JMS_PORT:61616}
+    user: 'psander'
+    password: '1234'
 springdoc:
   api-docs:
     path: /api-documentation

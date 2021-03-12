@@ -1,0 +1,29 @@
+
+version: '3'
+services:
+
+  jms:
+    container_name: jms
+    image: vromero/activemq-artemis
+    restart: always
+    environment:
+      ARTEMIS_USERNAME: 'psander'
+      ARTEMIS_PASSWORD: '1234'
+    ports:
+      - 61616:61616
+      - 8161:8161
+    expose:
+      - 61616
+      - 8161
+
+  produto:
+    container_name: produto
+    image: phsdr/dev:1.0
+    environment:
+      JMS_HOST: jms
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    depends_on:
+      - jms
